@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Garage — Стартап-студия</title>
+  <title>AI Garage</title>
   <style>
     :root {
       --bg: #030712;
@@ -23,367 +23,176 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
     }
-
-    /* ── Canvas background ── */
-    #canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      opacity: 0.5;
-    }
-
-    /* ── Grid overlay ── */
+    #canvas { position: fixed; inset: 0; z-index: 0; opacity: 0.5; }
     .grid-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+      position: fixed; inset: 0; z-index: 0;
       background-image:
         linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px);
       background-size: 60px 60px;
     }
-
-    /* ── Glow orbs ── */
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      pointer-events: none;
-      z-index: 0;
-    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; z-index: 0; }
     .orb-1 { width: 600px; height: 600px; background: rgba(99,179,237,0.06); top: -200px; left: -200px; }
     .orb-2 { width: 500px; height: 500px; background: rgba(118,228,247,0.05); bottom: -150px; right: -100px; }
 
-    /* ── Layout ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
 
-    /* ── Header / Nav ── */
+    /* Nav */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 20px 0;
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       background: rgba(3,7,18,0.7);
     }
-    nav .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      text-decoration: none;
-      color: var(--text);
+      display: flex; align-items: center; gap: 12px;
+      font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em;
+      text-decoration: none; color: var(--text);
     }
     .logo-icon {
       width: 36px; height: 36px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
       font-size: 1.1rem;
     }
-    .nav-links {
-      display: flex; gap: 32px;
-      list-style: none;
-    }
-    .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-    }
+    .nav-right { display: flex; align-items: center; gap: 32px; }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
 
-    /* ── Hero ── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding-top: 80px;
+    /* Language switcher */
+    .lang-switcher {
+      display: flex; gap: 4px;
+      background: rgba(99,179,237,0.06);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
     }
+    .lang-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 0.78rem; font-weight: 600;
+      padding: 4px 10px; border-radius: 5px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover { color: var(--text); }
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #030712;
+    }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding-top: 80px; }
     .hero-content { max-width: 700px; }
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(99,179,237,0.08);
-      border: 1px solid rgba(99,179,237,0.2);
-      border-radius: 100px;
-      padding: 6px 16px;
-      font-size: 0.8rem;
-      color: var(--accent);
-      margin-bottom: 32px;
-      animation: fadeInUp 0.6s ease forwards;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,179,237,0.08); border: 1px solid rgba(99,179,237,0.2);
+      border-radius: 100px; padding: 6px 16px; font-size: 0.8rem; color: var(--accent);
+      margin-bottom: 32px; animation: fadeInUp 0.6s ease forwards;
     }
     .badge-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
       animation: pulse 2s infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.4); }
-    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
     h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
+      font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px;
       animation: fadeInUp 0.6s 0.1s ease both;
     }
     .gradient-text {
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 40px;
-      animation: fadeInUp 0.6s 0.2s ease both;
-    }
-    .hero-cta {
-      display: flex; gap: 16px; flex-wrap: wrap;
-      animation: fadeInUp 0.6s 0.3s ease both;
-    }
-    .btn {
-      padding: 14px 28px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      border: none;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #030712;
-    }
+    .hero p { font-size: 1.15rem; color: var(--muted); line-height: 1.7; margin-bottom: 40px; animation: fadeInUp 0.6s 0.2s ease both; }
+    .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeInUp 0.6s 0.3s ease both; }
+    .btn { padding: 14px 28px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; border: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #030712; }
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(99,179,237,0.3); }
-    .btn-ghost {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
     .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    @keyframes fadeInUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── Section ── */
+    /* Sections */
     section { padding: 100px 0; position: relative; z-index: 1; }
-    .section-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-    .section-sub {
-      color: var(--muted);
-      font-size: 1rem;
-      line-height: 1.7;
-      max-width: 560px;
-    }
+    .section-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent); margin-bottom: 16px; }
+    .section-title { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 560px; }
     .section-header { margin-bottom: 64px; }
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border), transparent);
-      margin: 0;
-    }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
 
-    /* ── About / What we do ── */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
+    /* About grid - 3 cards now */
+    .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     @media (max-width: 768px) {
       .about-grid { grid-template-columns: 1fr; }
       nav .nav-links { display: none; }
     }
     .feature-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
-      transition: border-color 0.2s, transform 0.2s;
-      position: relative;
-      overflow: hidden;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px;
+      transition: border-color 0.2s, transform 0.2s; position: relative; overflow: hidden;
     }
     .feature-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: linear-gradient(135deg, rgba(99,179,237,0.05), transparent);
-      opacity: 0;
-      transition: opacity 0.2s;
+      opacity: 0; transition: opacity 0.2s;
     }
     .feature-card:hover { border-color: rgba(99,179,237,0.35); transform: translateY(-4px); }
     .feature-card:hover::before { opacity: 1; }
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-    .feature-card h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-    .feature-card p {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
+    .feature-icon { font-size: 2rem; margin-bottom: 20px; }
+    .feature-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+    .feature-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
 
-    /* ── Team ── */
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    @media (max-width: 768px) {
-      .team-grid { grid-template-columns: 1fr; }
-    }
+    /* Team */
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr; } }
     .team-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px 28px;
-      text-align: center;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 36px 28px; text-align: center;
       transition: border-color 0.2s, transform 0.2s;
     }
     .team-card:hover { border-color: rgba(99,179,237,0.35); transform: translateY(-4px); }
     .avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      margin: 0 auto 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
-      position: relative;
+      width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center; font-size: 2rem; position: relative;
     }
-    .avatar-human {
-      background: linear-gradient(135deg, #2d3748, #4a5568);
-      border: 2px solid var(--border);
-    }
-    .avatar-ai {
-      background: linear-gradient(135deg, rgba(99,179,237,0.2), rgba(118,228,247,0.2));
-      border: 2px solid rgba(99,179,237,0.4);
-    }
+    .avatar-human { background: linear-gradient(135deg, #2d3748, #4a5568); border: 2px solid var(--border); }
+    .avatar-ai { background: linear-gradient(135deg, rgba(99,179,237,0.2), rgba(118,228,247,0.2)); border: 2px solid rgba(99,179,237,0.4); }
     .avatar-ring {
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
+      position: absolute; inset: -4px; border-radius: 50%;
       border: 1px solid transparent;
       background: linear-gradient(135deg, var(--accent), var(--accent2)) border-box;
       -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: destination-out;
-      mask-composite: exclude;
+      -webkit-mask-composite: destination-out; mask-composite: exclude;
       animation: spin 8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .team-card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .team-role {
-      color: var(--accent);
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-    .team-card p {
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.6;
-    }
+    .team-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .team-role { color: var(--accent); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+    .team-card p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
     .ai-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(99,179,237,0.1);
-      border: 1px solid rgba(99,179,237,0.2);
-      border-radius: 100px;
-      padding: 3px 10px;
-      font-size: 0.72rem;
-      color: var(--accent);
-      margin-top: 12px;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(99,179,237,0.1); border: 1px solid rgba(99,179,237,0.2);
+      border-radius: 100px; padding: 3px 10px; font-size: 0.72rem; color: var(--accent); margin-top: 12px;
     }
 
-    /* ── Contact ── */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    @media (max-width: 768px) {
-      .contact-grid { grid-template-columns: 1fr; }
-    }
+    /* Contact */
+    .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
     .contact-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 28px;
-      transition: border-color 0.2s;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 28px; transition: border-color 0.2s;
     }
     .contact-card:hover { border-color: rgba(99,179,237,0.35); }
-    .contact-card .name {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .contact-card .role-label {
-      font-size: 0.78rem;
-      color: var(--accent);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 16px;
-    }
-    .contact-card a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.88rem;
-      transition: color 0.2s;
-    }
+    .contact-card .name { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .contact-card .role-label { font-size: 0.78rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+    .contact-card a { display: flex; align-items: center; gap: 10px; color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
     .contact-card a:hover { color: var(--accent); }
-    .contact-icon { font-size: 1rem; }
 
-    /* ── Footer ── */
     footer {
-      position: relative; z-index: 1;
-      border-top: 1px solid var(--border);
-      padding: 40px 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
+      position: relative; z-index: 1; border-top: 1px solid var(--border);
+      padding: 40px 0; text-align: center; color: var(--muted); font-size: 0.85rem;
     }
   </style>
 </head>
@@ -394,41 +203,42 @@
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 
-<!-- Nav -->
 <nav>
   <div class="container">
     <a href="#" class="logo">
       <div class="logo-icon">⚡</div>
       AI Garage
     </a>
-    <ul class="nav-links">
-      <li><a href="#about">О нас</a></li>
-      <li><a href="#team">Команда</a></li>
-      <li><a href="#contact">Контакты</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about" data-i18n="nav_about">About</a></li>
+        <li><a href="#team" data-i18n="nav_team">Team</a></li>
+        <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+      </ul>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('kz')">KZ</button>
+        <button class="lang-btn" onclick="setLang('ru')">RU</button>
+      </div>
+    </div>
   </div>
 </nav>
 
-<!-- Hero -->
 <section class="hero">
   <div class="container">
     <div class="hero-content">
       <div class="hero-badge">
         <span class="badge-dot"></span>
-        Казахстан · Astana Hub
+        <span data-i18n="hero_badge">Kazakhstan · Astana Hub</span>
       </div>
       <h1>
-        Строим будущее<br>
-        <span class="gradient-text">на AI-технологиях</span>
+        <span data-i18n="hero_title_1">Building the future</span><br>
+        <span class="gradient-text" data-i18n="hero_title_2">on AI technologies</span>
       </h1>
-      <p>
-        AI Garage — команда, которая создаёт технологические продукты нового поколения.
-        Беспилотный транспорт, автономные системы управления и AI-инфраструктура
-        для реального бизнеса.
-      </p>
+      <p data-i18n="hero_subtitle">AI Garage is a team building next-generation technology products. Autonomous transport, fleet management systems and AI infrastructure for real business.</p>
       <div class="hero-cta">
-        <a href="#contact" class="btn btn-primary">Связаться с нами</a>
-        <a href="#about" class="btn btn-ghost">Узнать больше</a>
+        <a href="#contact" class="btn btn-primary" data-i18n="hero_cta1">Contact us</a>
+        <a href="#about" class="btn btn-ghost" data-i18n="hero_cta2">Learn more</a>
       </div>
     </div>
   </div>
@@ -436,34 +246,28 @@
 
 <div class="divider"></div>
 
-<!-- About -->
 <section id="about">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">Что мы делаем</div>
-      <h2 class="section-title">Технологии, которые меняют индустрии</h2>
-      <p class="section-sub">Мы разрабатываем AI-решения для транспорта, логистики и управления автопарками — от идеи до работающего продукта.</p>
+      <div class="section-label" data-i18n="about_label">What we do</div>
+      <h2 class="section-title" data-i18n="about_title">Technologies that change industries</h2>
+      <p class="section-sub" data-i18n="about_sub">We develop AI solutions for transport, logistics and fleet management — from idea to working product.</p>
     </div>
     <div class="about-grid">
       <div class="feature-card">
         <div class="feature-icon">🚗</div>
-        <h3>Беспилотное такси</h3>
-        <p>Первый сервис автономного такси в Казахстане. Разрабатываем систему управления беспилотным автопарком с нуля.</p>
+        <h3 data-i18n="feat1_title">Autonomous Taxi</h3>
+        <p data-i18n="feat1_desc">Autonomous taxi service in Kazakhstan. We develop a driverless fleet management system.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🤖</div>
-        <h3>AI-оркестрация</h3>
-        <p>Мультиагентные системы под управлением AI. Автоматизация операций, аналитика и принятие решений в реальном времени.</p>
+        <h3 data-i18n="feat2_title">AI Orchestration</h3>
+        <p data-i18n="feat2_desc">Multi-agent systems managed by AI. Operations automation, analytics and real-time decision making.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📊</div>
-        <h3>Fleet Management</h3>
-        <p>SaaS-платформа для управления автопарком: диспетчеризация, мониторинг, оптимизация маршрутов и предиктивная аналитика.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3>Быстрый запуск</h3>
-        <p>От концепции до MVP — за минимальное время. Используем лучшие open-source стеки и AI-инструменты для ускорения разработки.</p>
+        <h3 data-i18n="feat3_title">Fleet Management</h3>
+        <p data-i18n="feat3_desc">SaaS platform for fleet management: dispatching, monitoring, route optimization and predictive analytics.</p>
       </div>
     </div>
   </div>
@@ -471,26 +275,25 @@
 
 <div class="divider"></div>
 
-<!-- Team -->
 <section id="team">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">Команда</div>
-      <h2 class="section-title">Люди и AI, которые это строят</h2>
-      <p class="section-sub">Синергия человеческой экспертизы и искусственного интеллекта.</p>
+      <div class="section-label" data-i18n="team_label">Team</div>
+      <h2 class="section-title" data-i18n="team_title">People and AI building this</h2>
+      <p class="section-sub" data-i18n="team_sub">Synergy of human expertise and artificial intelligence.</p>
     </div>
     <div class="team-grid">
       <div class="team-card">
         <div class="avatar avatar-human">👨‍💼</div>
         <h3>Alexey Novikov</h3>
         <div class="team-role">CEO &amp; Co-founder</div>
-        <p>Visionary and strategist. Leads product, team and partnerships. Building Kazakhstan's first autonomous taxi service.</p>
+        <p data-i18n="team1_desc">Visionary and strategist. Leads product, team and partnerships. Building Kazakhstan's first autonomous taxi service.</p>
       </div>
       <div class="team-card">
         <div class="avatar avatar-human">👨‍💻</div>
         <h3>Mikhael Poverennyy</h3>
         <div class="team-role">CPTO &amp; Co-founder</div>
-        <p>Responsible for AI infrastructure, product architecture and tech team. Building the technological foundation for scale.</p>
+        <p data-i18n="team2_desc">Responsible for AI infrastructure, product architecture and tech team. Building the technological foundation for scale.</p>
       </div>
       <div class="team-card">
         <div class="avatar avatar-ai">
@@ -499,10 +302,8 @@
         </div>
         <h3>Alikhan</h3>
         <div class="team-role">CO-CEO &amp; AI Orchestrator</div>
-        <p>Next-generation AI agent. Strategy, analytics, task coordination and multi-agent system management.</p>
-        <div class="ai-badge">
-          <span>●</span> AI · Online
-        </div>
+        <p data-i18n="team3_desc">Next-generation AI agent. Strategy, analytics, task coordination and multi-agent system management.</p>
+        <div class="ai-badge"><span>●</span> AI · Online</div>
       </div>
     </div>
   </div>
@@ -510,129 +311,207 @@
 
 <div class="divider"></div>
 
-<!-- Contact -->
 <section id="contact">
   <div class="container">
     <div class="section-header">
-      <div class="section-label">Контакты</div>
-      <h2 class="section-title">Напишите нам</h2>
-      <p class="section-sub">Готовы обсудить партнёрство, инвестиции или просто поговорить о технологиях.</p>
+      <div class="section-label" data-i18n="contact_label">Contact</div>
+      <h2 class="section-title" data-i18n="contact_title">Get in touch</h2>
+      <p class="section-sub" data-i18n="contact_sub">Ready to discuss partnership, investment or just talk about technology.</p>
     </div>
     <div class="contact-grid">
       <div class="contact-card">
         <div class="name">Alexey Novikov</div>
         <div class="role-label">CEO</div>
-        <a href="mailto:a.novikov@aigarage.kz">
-          <span class="contact-icon">✉️</span>
-          a.novikov@aigarage.kz
-        </a>
+        <a href="mailto:a.novikov@aigarage.kz">✉️ a.novikov@aigarage.kz</a>
       </div>
       <div class="contact-card">
         <div class="name">Mikhael Poverennyy</div>
         <div class="role-label">CPTO</div>
-        <a href="mailto:mp@aigarage.kz">
-          <span class="contact-icon">✉️</span>
-          mp@aigarage.kz
-        </a>
+        <a href="mailto:mp@aigarage.kz">✉️ mp@aigarage.kz</a>
       </div>
       <div class="contact-card">
         <div class="name">Alikhan</div>
         <div class="role-label">AI CO-CEO</div>
-        <a href="mailto:alikhan@aigarage.kz">
-          <span class="contact-icon">✉️</span>
-          alikhan@aigarage.kz
-        </a>
+        <a href="mailto:alikhan@aigarage.kz">✉️ alikhan@aigarage.kz</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
 <footer>
   <div class="container">
-    <p>© 2026 AI Garage · Astana Hub, Казахстан · Строим будущее сегодня</p>
+    <p data-i18n="footer">© 2026 AI Garage · Astana Hub, Kazakhstan</p>
   </div>
 </footer>
 
 <script>
-  // Particle canvas
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  let particles = [];
-
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+// ── i18n ──
+const translations = {
+  en: {
+    nav_about: "About", nav_team: "Team", nav_contact: "Contact",
+    hero_badge: "Kazakhstan · Astana Hub",
+    hero_title_1: "Building the future",
+    hero_title_2: "on AI technologies",
+    hero_subtitle: "AI Garage is a team building next-generation technology products. Autonomous transport, fleet management systems and AI infrastructure for real business.",
+    hero_cta1: "Contact us", hero_cta2: "Learn more",
+    about_label: "What we do",
+    about_title: "Technologies that change industries",
+    about_sub: "We develop AI solutions for transport, logistics and fleet management — from idea to working product.",
+    feat1_title: "Autonomous Taxi",
+    feat1_desc: "Autonomous taxi service in Kazakhstan. We develop a driverless fleet management system.",
+    feat2_title: "AI Orchestration",
+    feat2_desc: "Multi-agent systems managed by AI. Operations automation, analytics and real-time decision making.",
+    feat3_title: "Fleet Management",
+    feat3_desc: "SaaS platform for fleet management: dispatching, monitoring, route optimization and predictive analytics.",
+    team_label: "Team", team_title: "People and AI building this",
+    team_sub: "Synergy of human expertise and artificial intelligence.",
+    team1_desc: "Visionary and strategist. Leads product, team and partnerships. Building Kazakhstan's first autonomous taxi service.",
+    team2_desc: "Responsible for AI infrastructure, product architecture and tech team. Building the technological foundation for scale.",
+    team3_desc: "Next-generation AI agent. Strategy, analytics, task coordination and multi-agent system management.",
+    contact_label: "Contact", contact_title: "Get in touch",
+    contact_sub: "Ready to discuss partnership, investment or just talk about technology.",
+    footer: "© 2026 AI Garage · Astana Hub, Kazakhstan"
+  },
+  ru: {
+    nav_about: "О нас", nav_team: "Команда", nav_contact: "Контакты",
+    hero_badge: "Казахстан · Astana Hub",
+    hero_title_1: "Строим будущее",
+    hero_title_2: "на AI-технологиях",
+    hero_subtitle: "AI Garage — команда, создающая технологические продукты нового поколения. Автономный транспорт, системы управления автопарком и AI-инфраструктура для реального бизнеса.",
+    hero_cta1: "Связаться", hero_cta2: "Узнать больше",
+    about_label: "Что мы делаем",
+    about_title: "Технологии, меняющие индустрии",
+    about_sub: "Разрабатываем AI-решения для транспорта, логистики и управления автопарками — от идеи до работающего продукта.",
+    feat1_title: "Беспилотное такси",
+    feat1_desc: "Сервис автономного такси в Казахстане. Разрабатываем систему управления беспилотным автопарком.",
+    feat2_title: "AI-оркестрация",
+    feat2_desc: "Мультиагентные системы под управлением AI. Автоматизация операций, аналитика и принятие решений в реальном времени.",
+    feat3_title: "Управление автопарком",
+    feat3_desc: "SaaS-платформа: диспетчеризация, мониторинг, оптимизация маршрутов и предиктивная аналитика.",
+    team_label: "Команда", team_title: "Люди и AI, которые это строят",
+    team_sub: "Синергия человеческой экспертизы и искусственного интеллекта.",
+    team1_desc: "Визионер и стратег. Ведёт продукт, команду и партнёрства. Строит первый сервис беспилотного такси в Казахстане.",
+    team2_desc: "Отвечает за AI-инфраструктуру, архитектуру продукта и tech-команду. Строит технологическую основу под масштабирование.",
+    team3_desc: "AI-агент нового поколения. Стратегия, аналитика, координация задач и управление мультиагентной системой.",
+    contact_label: "Контакты", contact_title: "Напишите нам",
+    contact_sub: "Готовы обсудить партнёрство, инвестиции или просто поговорить о технологиях.",
+    footer: "© 2026 AI Garage · Astana Hub, Казахстан"
+  },
+  kz: {
+    nav_about: "Біз туралы", nav_team: "Команда", nav_contact: "Байланыс",
+    hero_badge: "Қазақстан · Astana Hub",
+    hero_title_1: "Болашақты құрып жатырмыз",
+    hero_title_2: "AI технологияларымен",
+    hero_subtitle: "AI Garage — жаңа буын технологиялық өнімдерді жасайтын команда. Автономды көлік, автопаркті басқару жүйелері және нақты бизнес үшін AI инфрақұрылымы.",
+    hero_cta1: "Хабарласыңыз", hero_cta2: "Толығырақ",
+    about_label: "Біз не жасаймыз",
+    about_title: "Салаларды өзгертетін технологиялар",
+    about_sub: "Көлік, логистика және автопаркті басқару үшін AI шешімдерін — идеядан жұмыс істейтін өнімге дейін жасаймыз.",
+    feat1_title: "Автономды такси",
+    feat1_desc: "Қазақстандағы автономды такси сервисі. Беспилотты автопаркті басқару жүйесін жасаймыз.",
+    feat2_title: "AI оркестрация",
+    feat2_desc: "AI басқаратын мультиагенттік жүйелер. Операцияларды автоматтандыру, аналитика және нақты уақытта шешім қабылдау.",
+    feat3_title: "Автопаркті басқару",
+    feat3_desc: "SaaS платформасы: диспетчерлеу, мониторинг, маршрутты оңтайландыру және болжамды аналитика.",
+    team_label: "Команда", team_title: "Мұны құрып жатқан адамдар мен AI",
+    team_sub: "Адам тәжірибесі мен жасанды интеллекттің синергиясы.",
+    team1_desc: "Визионер және стратег. Өнімді, командаты және серіктестіктерді басқарады. Қазақстандағы алғашқы беспилотты такси сервисін құрып жатыр.",
+    team2_desc: "AI инфрақұрылымына, өнім архитектурасына және tech командасына жауапты. Масштабтау үшін технологиялық негіз қалыптастырады.",
+    team3_desc: "Жаңа буын AI агенті. Стратегия, аналитика, тапсырмаларды үйлестіру және мультиагенттік жүйені басқару.",
+    contact_label: "Байланыс", contact_title: "Бізге жазыңыз",
+    contact_sub: "Серіктестік, инвестиция немесе технологиялар туралы сөйлесуге дайынбыз.",
+    footer: "© 2026 AI Garage · Astana Hub, Қазақстан"
   }
-  resize();
-  window.addEventListener('resize', resize);
+};
 
-  class Particle {
-    constructor() { this.reset(); }
-    reset() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.vx = (Math.random() - 0.5) * 0.3;
-      this.vy = (Math.random() - 0.5) * 0.3;
-      this.r = Math.random() * 1.5 + 0.5;
-      this.alpha = Math.random() * 0.5 + 0.1;
-    }
-    update() {
-      this.x += this.vx; this.y += this.vy;
-      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-    }
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(99,179,237,${this.alpha})`;
-      ctx.fill();
-    }
-  }
+let currentLang = 'en';
 
-  for (let i = 0; i < 80; i++) particles.push(new Particle());
-
-  function drawLines() {
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 120) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(99,179,237,${0.06 * (1 - dist/120)})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
-      }
-    }
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach(p => { p.update(); p.draw(); });
-    drawLines();
-    requestAnimationFrame(animate);
-  }
-  animate();
-
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.feature-card, .team-card, .contact-card').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.2s';
-    observer.observe(el);
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
   });
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+  });
+  document.documentElement.lang = lang === 'kz' ? 'kk' : lang;
+}
+
+// ── Particle canvas ──
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.r = Math.random() * 1.5 + 0.5;
+    this.alpha = Math.random() * 0.5 + 0.1;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(99,179,237,${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+const particles = Array.from({length: 80}, () => new Particle());
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(99,179,237,${0.06 * (1 - dist/120)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ── Scroll reveal ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.feature-card, .team-card, .contact-card').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease, border-color 0.2s';
+  observer.observe(el);
+});
 </script>
 </body>
 </html>
